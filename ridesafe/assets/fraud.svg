@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 340" font-family="system-ui, Segoe UI, sans-serif">
+  <style>
+    .dash { stroke-dasharray: 7 8; animation: flow 1.2s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -30; } }
+    .ring { transform-box: fill-box; transform-origin: center; animation: ping 1.8s ease-out infinite; }
+    @keyframes ping { from { transform: scale(.5); opacity: .9; } to { transform: scale(2.4); opacity: 0; } }
+  </style>
+  <rect width="480" height="340" rx="22" fill="#dce8e2"/>
+  <g fill="#eef5f1">
+    <rect x="30" y="30" width="70" height="46" rx="6"/><rect x="120" y="22" width="60" height="60" rx="6"/>
+    <rect x="300" y="200" width="80" height="56" rx="6"/><rect x="398" y="226" width="56" height="70" rx="6"/>
+    <rect x="40" y="250" width="90" height="52" rx="6"/><rect x="150" y="240" width="64" height="64" rx="6"/>
+    <rect x="270" y="40" width="60" height="44" rx="6"/><rect x="380" y="30" width="70" height="50" rx="6"/>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-10 118 C 90 130, 180 100, 280 130 S 420 160, 500 120" stroke="#c3d4cb" stroke-width="22"/>
+    <path d="M-10 118 C 90 130, 180 100, 280 130 S 420 160, 500 120" stroke="#fff" stroke-width="17"/>
+    <path d="M230 -10 C 240 90, 220 190, 244 350" stroke="#c3d4cb" stroke-width="22"/>
+    <path d="M230 -10 C 240 90, 220 190, 244 350" stroke="#fff" stroke-width="17"/>
+    <path d="M100 215 C 160 120, 300 120, 372 92" stroke="#e5472b" stroke-width="4" class="dash"/>
+  </g>
+  <g transform="translate(100 215)">
+    <circle r="22" fill="#1f9d62" opacity=".18"/>
+    <circle r="9" fill="#1f9d62" stroke="#fff" stroke-width="3"/>
+  </g>
+  <g transform="translate(372 92)">
+    <circle r="9" class="ring" fill="#e5472b"/>
+    <circle r="10" fill="#e5472b" stroke="#fff" stroke-width="3"/>
+  </g>
+  <g transform="translate(40 262)">
+    <rect width="150" height="44" rx="12" fill="#12332f"/>
+    <text x="14" y="19" font-size="11" fill="#9fc1b8">Last GPS fix</text>
+    <text x="14" y="35" font-size="13" font-weight="700" fill="#fff">Benz Circle</text>
+  </g>
+  <g transform="translate(290 28)">
+    <rect width="170" height="52" rx="12" fill="#e5472b"/>
+    <text x="14" y="22" font-size="11" fill="#ffe3dc">Next fix, 4 seconds later</text>
+    <text x="14" y="41" font-size="14" font-weight="700" fill="#fff">9 km away</text>
+  </g>
+</svg>

@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08241c">
+  <title>RideSafe: Real-Time Ride Fraud &amp; Traffic Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<!-- ============================ LANDING ============================ -->
+<div id="landing">
+  <header class="nav">
+    <a class="brand" href="#top"><span class="logo"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg></span>RideSafe</a>
+    <nav class="nav-links"><a href="#how">How it works</a><a href="#features">What's inside</a><a href="#stack">Built with</a></nav>
+    <button class="btn" data-open-auth>Sign in</button>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <h1><span class="l1">Every ride watched.</span> <span class="l2">Every road read.</span></h1>
+      <p class="lead">RideSafe spots fake bookings and GPS tricks while a ride is still happening, and steers drivers around jams, all from one cloud dashboard.</p>
+      <div class="hero-cta">
+        <button class="btn big" data-open-auth>Sign in</button>
+        <a class="btn ghost big" href="#how">See how it works</a>
+      </div>
+      <div class="demo-pick" id="demoPick">
+        <span class="muted small">Try the demo as</span>
+        <button class="chipbtn" data-demo="user@demo.com">Passenger</button>
+        <button class="chipbtn" data-demo="driver@demo.com">Driver</button>
+        <button class="chipbtn" data-demo="admin@demo.com">Admin</button>
+      </div>
+    </div>
+
+    <div class="hero-art" aria-label="Animated map: cars follow their routes and one car that leaves its expected route is flagged">
+      <svg viewBox="0 0 640 540" role="img">
+        <defs>
+          <radialGradient id="glowY"><stop offset="0" stop-color="#f4c430" stop-opacity=".55"/><stop offset="1" stop-color="#f4c430" stop-opacity="0"/></radialGradient>
+          <radialGradient id="glowR"><stop offset="0" stop-color="#ff5a5f" stop-opacity=".6"/><stop offset="1" stop-color="#ff5a5f" stop-opacity="0"/></radialGradient>
+          <path id="r1" d="M10 400 C140 380 210 310 310 300 S500 260 630 150"/>
+          <path id="r1b" d="M630 150 C500 260 410 300 310 300 S140 380 10 400"/>
+          <path id="r2" d="M90 20 C130 140 230 210 310 300 S370 450 430 530"/>
+          <path id="r3" d="M10 210 C150 230 260 170 380 180 S560 240 630 340"/>
+          <path id="r3dev" d="M10 210 C110 320 240 350 340 380 S540 380 630 340"/>
+          <path id="ring" d="M170 480 C100 320 200 120 400 100 S610 210 560 420 S260 520 170 480"/>
+        </defs>
+
+        <g class="grid-lines" stroke="#7fd6a4" stroke-opacity=".07">
+          <path d="M0 90H640M0 180H640M0 270H640M0 360H640M0 450H640M80 0V540M200 0V540M320 0V540M440 0V540M560 0V540"/>
+        </g>
+
+        <!-- roads draw in -->
+        <g fill="none" stroke-linecap="round">
+          <g class="road" stroke="#1d3a31" stroke-width="22"><use href="#r1"/><use href="#r2"/><use href="#r3"/><use href="#ring"/></g>
+          <g class="road centre" stroke="#7fd6a4" stroke-opacity=".35" stroke-width="1.5" stroke-dasharray="3 9"><use href="#r1"/><use href="#r2"/><use href="#r3"/><use href="#ring"/></g>
+        </g>
+
+        <!-- congestion -->
+        <g class="jam">
+          <circle cx="310" cy="300" r="62" fill="url(#glowY)"><animate attributeName="r" values="52;70;52" dur="3.4s" repeatCount="indefinite"/></circle>
+          <g transform="translate(332 250)"><rect width="128" height="26" rx="13" fill="#10201b" stroke="#f4c430" stroke-opacity=".7"/><circle cx="14" cy="13" r="4" fill="#f4c430"/><text x="26" y="17.5" fill="#f4c430" font-size="12" font-weight="600">Benz Circle · 78%</text></g>
+        </g>
+
+        <!-- expected vs actual route of flagged ride -->
+        <use href="#r3" fill="none" stroke="#7fd6a4" stroke-opacity=".6" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round" class="expected"/>
+        <use href="#r3dev" fill="none" stroke="#ff5a5f" stroke-width="3" stroke-dasharray="9 7" stroke-linecap="round" class="deviation"/>
+
+        <!-- normal cars -->
+        <g class="car mint"><circle r="9" fill="url(#glowY)"/><circle r="4.5" fill="#7fd6a4"/><animateMotion dur="9s" begin="1.6s" repeatCount="indefinite"><mpath href="#r1"/></animateMotion></g>
+        <g class="car mint"><circle r="4.5" fill="#7fd6a4"/><animateMotion dur="11s" begin="2s" repeatCount="indefinite"><mpath href="#r1b"/></animateMotion></g>
+        <g class="car yellow"><circle r="4.5" fill="#f4c430"/><animateMotion dur="8s" begin="1.8s" repeatCount="indefinite"><mpath href="#r2"/></animateMotion></g>
+        <g class="car mint"><circle r="4.5" fill="#7fd6a4"/><animateMotion dur="13s" begin="2.2s" repeatCount="indefinite"><mpath href="#ring"/></animateMotion></g>
+        <g class="car mint"><circle r="4.5" fill="#7fd6a4"/><animateMotion dur="12s" begin="3s" repeatCount="indefinite"><mpath href="#r3"/></animateMotion></g>
+
+        <!-- flagged car -->
+        <g class="car flagged">
+          <circle r="5" fill="#ff5a5f"/>
+          <circle r="8" fill="none" stroke="#ff5a5f" stroke-width="2"><animate attributeName="r" values="8;30" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;0" dur="1.6s" repeatCount="indefinite"/></circle>
+          <animateMotion dur="10s" begin="2.4s" repeatCount="indefinite"><mpath href="#r3dev"/></animateMotion>
+        </g>
+
+        <!-- alert chip -->
+        <g class="chip-alert" transform="translate(300 400)">
+          <rect width="190" height="46" rx="12" fill="#10201b" stroke="#ff5a5f" stroke-opacity=".8"/>
+          <circle cx="20" cy="23" r="12" fill="#ff5a5f" fill-opacity=".18"/><text x="20" y="28" fill="#ff5a5f" font-size="14" font-weight="800" text-anchor="middle">!</text>
+          <text x="40" y="20" fill="#eaf2ec" font-size="12.5" font-weight="700">Unusual route</text>
+          <text x="40" y="36" fill="#9db5a8" font-size="11.5">Ride #4821 · risk 92</text>
+        </g>
+
+        <!-- pickup / drop pins -->
+        <g transform="translate(10 210)"><circle r="7" fill="#08241c" stroke="#7fd6a4" stroke-width="2.5"/></g>
+        <g transform="translate(630 340)"><circle r="7" fill="#08241c" stroke="#7fd6a4" stroke-width="2.5"/></g>
+
+        <!-- shield badge -->
+        <g transform="translate(548 40)">
+          <circle r="30" fill="#10201b" stroke="#7fd6a4" stroke-opacity=".5"/>
+          <g fill="none" stroke="#7fd6a4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0 -15 L13 -10 V1 C13 9 7 14 0 17 C-7 14 -13 9 -13 1 V-10 Z"/><path d="M-5 1 L-1 5 L6 -3"/></g>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- LIVE FEED STRIP -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="t red">Unusual route · ride #4821 · risk 92</span>
+      <span class="t yellow">Benz Circle congestion 78% · detour via Autonagar</span>
+      <span class="t red">7 cancellations in 30 min · account flagged</span>
+      <span class="t mint">Ride #4807 completed · no anomalies</span>
+      <span class="t red">GPS jumped 9 km in 4 s · ride held for review</span>
+      <span class="t yellow">Gannavaram road clearing · avg speed 41 km/h</span>
+      <span class="t red">Unusual route · ride #4821 · risk 92</span>
+      <span class="t yellow">Benz Circle congestion 78% · detour via Autonagar</span>
+      <span class="t red">7 cancellations in 30 min · account flagged</span>
+      <span class="t mint">Ride #4807 completed · no anomalies</span>
+      <span class="t red">GPS jumped 9 km in 4 s · ride held for review</span>
+      <span class="t yellow">Gannavaram road clearing · avg speed 41 km/h</span>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS (a real sequence) -->
+  <section class="section" id="how">
+    <h2 class="sec-title">From a booking to a decision in four steps</h2>
+    <p class="sec-lead">Most platforms find fraud after a complaint. RideSafe checks every ride as it happens.</p>
+    <ol class="steps">
+      <li><span class="n">1</span><h3>Collect</h3><p>Ride, GPS, fare and traffic data stream in from the passenger and driver apps.</p></li>
+      <li><span class="n">2</span><h3>Score</h3><p>The model checks routes, cancellations, trip duration and location consistency.</p></li>
+      <li><span class="n">3</span><h3>Alert</h3><p>Staff, drivers and passengers get a push, SMS or email within seconds.</p></li>
+      <li><span class="n">4</span><h3>Act</h3><p>Review the case, resolve it or block the account, and reroute around the jam.</p></li>
+      <li class="runner" aria-hidden="true"></li>
+    </ol>
+  </section>
+
+  <!-- FEATURES (bento) -->
+  <section class="section" id="features">
+    <h2 class="sec-title">Everything staff and riders need in one place</h2>
+    <div class="bento">
+      <article class="tile t-fraud">
+        <h3>Fraud caught while the ride is on</h3>
+        <p>Fake bookings, repeated cancellations, GPS jumps and stretched trips each get a risk score and a plain reason.</p>
+        <svg viewBox="0 0 300 120" aria-hidden="true" class="mini">
+          <path d="M10 90 C80 90 120 40 290 40" fill="none" stroke="#7fd6a4" stroke-opacity=".6" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/>
+          <path d="M10 90 C90 120 170 110 290 40" fill="none" stroke="#ff5a5f" stroke-width="3" stroke-linecap="round" class="draw"/>
+          <circle cx="290" cy="40" r="6" fill="#08241c" stroke="#7fd6a4" stroke-width="2.5"/>
+          <circle cx="10" cy="90" r="6" fill="#08241c" stroke="#7fd6a4" stroke-width="2.5"/>
+          <g transform="translate(150 94)"><circle r="14" fill="#ff5a5f" fill-opacity=".2"><animate attributeName="r" values="10;20;10" dur="2s" repeatCount="indefinite"/></circle><circle r="5" fill="#ff5a5f"/></g>
+        </svg>
+      </article>
+      <article class="tile t-traffic">
+        <h3>Traffic that feeds the route</h3>
+        <p>Live congestion by zone, with a suggested detour whenever a road backs up.</p>
+        <div class="eq" aria-hidden="true"><i style="--h:35%;--d:0s"></i><i style="--h:70%;--d:.2s"></i><i style="--h:50%;--d:.4s"></i><i style="--h:90%;--d:.1s"></i><i style="--h:60%;--d:.3s"></i><i style="--h:30%;--d:.5s"></i><i style="--h:75%;--d:.15s"></i></div>
+      </article>
+      <article class="tile">
+        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 005 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+        <h3>GPS and route checks</h3><p>Compares the driven path with the expected one and flags location data that doesn't add up.</p>
+      </article>
+      <article class="tile">
+        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg>
+        <h3>Alerts that reach people</h3><p>Push, SMS and email notifications, plus a bell inside the app.</p>
+      </article>
+      <article class="tile">
+        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 14l3-3 3 2 4-5M8 21h8"/></svg>
+        <h3>One admin dashboard</h3><p>Alerts, rides, users and weekly reports side by side.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- DRIVING AUTO STRIP -->
+  <div class="roadstrip" aria-hidden="true">
+    <div class="road-line"></div>
+    <svg class="auto" viewBox="0 0 160 100" width="150">
+      <g class="bob">
+        <path d="M28 38 Q30 16 70 16 L108 18 Q120 20 124 34 L124 40 L28 40 Z" fill="#0f7a54"/>
+        <rect x="26" y="40" width="98" height="28" rx="7" fill="#f4c430"/>
+        <rect x="36" y="25" width="42" height="12" rx="3" fill="#bfe9ff" fill-opacity=".45"/>
+        <path d="M112 22 L124 36 L112 38 Z" fill="#bfe9ff" fill-opacity=".45"/>
+        <circle cx="125" cy="52" r="3.2" fill="#fff6c9"/>
+        <path d="M126 56 L137 80" stroke="#cfd8d2" stroke-width="3" stroke-linecap="round"/>
+        <rect x="30" y="56" width="26" height="4" rx="2" fill="#0f7a54"/>
+      </g>
+      <g class="wheel" style="transform-origin:52px 80px"><circle cx="52" cy="80" r="13" fill="#10201b" stroke="#cfd8d2" stroke-width="2"/><path d="M52 69v22M41 80h22" stroke="#cfd8d2" stroke-width="2"/></g>
+      <g class="wheel" style="transform-origin:137px 80px"><circle cx="137" cy="80" r="11" fill="#10201b" stroke="#cfd8d2" stroke-width="2"/><path d="M137 71v18M128 80h18" stroke="#cfd8d2" stroke-width="2"/></g>
+    </svg>
+  </div>
+
+  <section class="section" id="stack">
+    <h2 class="sec-title">Built with</h2>
+    <div class="stack">
+      <span>Python</span><span>AWS</span><span>Apache Kafka</span><span>NeonDB</span><span>AI / ML</span><span>Google Maps API</span><span>Flutter &amp; Android</span><span>Power BI</span><span>JWT · HTTPS · OAuth</span><span>REST APIs</span>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div><b>Cloud-Based Real-Time Ride Fraud and Traffic Intelligence Platform</b><div class="muted small">24MIC7066 · 24MIC7107 · 24MIC7121 · 24MIS7357 · 24MIS7274</div></div>
+    <button class="btn" data-open-auth>Sign in</button>
+  </footer>
+</div>
+
+<!-- ============================ AUTH MODAL ============================ -->
+<section id="auth" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <form class="auth-card" id="authForm" novalidate>
+    <button type="button" class="x" id="authClose" aria-label="Close">&times;</button>
+    <h2 id="authTitle">Sign in</h2>
+    <div class="seg" id="authMode">
+      <button type="button" data-mode="login" class="on">Sign in</button>
+      <button type="button" data-mode="register">Register</button>
+    </div>
+    <div id="nameRow" class="hidden"><label for="name">Full name</label><input id="name" autocomplete="name"></div>
+    <label for="email">Email</label><input id="email" type="email" autocomplete="email" required>
+    <label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required>
+    <div id="roleRow" class="hidden">
+      <label for="role">I am a</label>
+      <select id="role"><option value="passenger">Passenger</option><option value="driver">Driver</option></select>
+    </div>
+    <p class="error" id="authError" role="alert"></p>
+    <button class="btn" style="width:100%" id="authSubmit">Sign in</button>
+    <div class="demo-note" id="demoNote">
+      <b>Demo mode.</b> Any password works. The email sets your role:<br>
+      <code>admin@demo.com</code> · <code>driver@demo.com</code> · <code>user@demo.com</code>
+    </div>
+  </form>
+</section>
+
+<!-- ============================ APP ============================ -->
+<div id="app" class="hidden">
+  <header class="topbar">
+    <div class="brand"><span class="logo"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg></span>RideSafe</div>
+    <span class="role-badge" id="roleBadge"></span>
+    <span class="spacer"></span>
+    <span class="muted small" id="userName"></span>
+    <button class="bell" id="bellBtn" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg><span class="dot hidden" id="bellDot"></span></button>
+    <button class="btn ghost sm" id="logoutBtn">Sign out</button>
+    <div class="notif-panel hidden" id="notifPanel"></div>
+  </header>
+  <nav class="tabs" id="tabs" role="tablist"></nav>
+  <main id="view"></main>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/bg.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 480 340" font-family="system-ui, Segoe UI, sans-serif">
+  <style>
+    .alt { stroke-dasharray: 8 8; animation: flow 1.2s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -32; } }
+  </style>
+  <defs>
+    <path id="main" d="M-10 190 C 80 190, 120 120, 200 130 S 330 200, 490 150"/>
+    <path id="detour" d="M150 128 C 170 60, 290 40, 330 100 C 350 130, 360 170, 372 182"/>
+  </defs>
+  <rect width="480" height="340" rx="22" fill="#dce8e2"/>
+  <g fill="#eef5f1">
+    <rect x="24" y="24" width="80" height="60" rx="6"/><rect x="24" y="250" width="100" height="62" rx="6"/>
+    <rect x="190" y="250" width="90" height="64" rx="6"/><rect x="380" y="240" width="76" height="72" rx="6"/>
+    <rect x="390" y="26" width="64" height="58" rx="6"/><rect x="220" y="170" width="60" height="50" rx="6"/>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <use xlink:href="#main" href="#main" stroke="#c3d4cb" stroke-width="30"/>
+    <use xlink:href="#main" href="#main" stroke="#fff" stroke-width="24"/>
+    <use xlink:href="#detour" href="#detour" stroke="#c3d4cb" stroke-width="20"/>
+    <use xlink:href="#detour" href="#detour" stroke="#fff" stroke-width="14"/>
+    <path d="M150 128 C 170 60, 290 40, 330 100 C 350 130, 360 170, 372 182" stroke="#1f9d62" stroke-width="3.5" class="alt"/>
+    <path d="M110 150 C 120 128, 150 118, 200 130" stroke="#f5b82e" stroke-width="9" opacity=".9"/>
+    <path d="M200 130 C 250 140, 290 175, 310 186" stroke="#e5472b" stroke-width="9" opacity=".9"/>
+    <path d="M-10 190 C 40 190, 80 170, 110 150" stroke="#1f9d62" stroke-width="9" opacity=".9"/>
+    <path d="M310 186 C 380 200, 440 170, 490 150" stroke="#1f9d62" stroke-width="9" opacity=".9"/>
+  </g>
+  <g fill="#f5b82e" stroke="#12332f" stroke-width="2">
+    <circle cx="214" cy="134" r="6.5"/><circle cx="238" cy="145" r="6.5"/><circle cx="262" cy="159" r="6.5"/><circle cx="284" cy="173" r="6.5"/>
+  </g>
+  <g>
+    <circle r="7" fill="#f5b82e" stroke="#12332f" stroke-width="2">
+      <animateMotion dur="5s" repeatCount="indefinite"><mpath xlink:href="#detour" href="#detour"/></animateMotion>
+    </circle>
+  </g>
+  <g transform="translate(236 214)">
+    <rect width="150" height="46" rx="12" fill="#12332f"/>
+    <text x="14" y="20" font-size="11" fill="#9fc1b8">Congested ahead</text>
+    <text x="14" y="37" font-size="13" font-weight="700" fill="#fff">Detour saves 7 min</text>
+  </g>
+</svg>
